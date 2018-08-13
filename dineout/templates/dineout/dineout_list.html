@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no"/>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8"/>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+
+    <title>Restaurant| DineOut</title>
+
+    <style>
+      #map {
+        height: 500px;  /* The height is 500 pixels */
+        width: 100%;  /* The width is the width of the web page */
+       }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h2 class="card text-white bg-primary"><center>Top Restaurants in Bangalore</center></h2>
+      
+      <!--The div element for the map -->
+      <div class="card" id="map"></div>
+      <p><center>Click on Red Marker to open/close the Details of Restaurant</center></p>
+    </div>
+    
+    <script>
+
+    function initMap(){
+          var restdatas = {{list_rest|safe}};
+          // console.log(restdatas);
+          var map = new google.maps.Map(document.getElementById('map'), {
+              zoom: 14,
+              center: new google.maps.LatLng(12.9716,77.5946),
+              mapTypeId: google.maps.MapTypeId.ROADMAP
+            });
+
+          var infowindow = new google.maps.InfoWindow();
+          var geocoder = new google.maps.Geocoder();
+
+          var marker, i;
+
+          for (i = 0; i < restdatas.length; i++) {
+              geocodeAddress(restdatas[i]);
+          }
+
+      function geocodeAddress(restdata) {
+          geocoder.geocode( { 'address': restdata[0]+restdata[1]}, function(results, status) {
+            if (status == google.maps.GeocoderStatus.OK) {
+                var url= "http://www.dineout.co.in"+restdata[2];
+                
+                var markercontent =`
+                    <div class="row">
+                      <div class="col-sm-6">
+                        <div class="card border-info ">
+                          <div class="card-header border-danger">
+                            <h5 class="card-title text-danger">
+                            `+restdata[0]+
+                            `</h5>
+                          </div>
+                          <div class="card-body text-info">
+                              <h6 class="card-title">
+                              <strong>Rating: </strong>`
+                              +restdata[3]+
+                              `</h6>
+                              <strong>Address:</strong>
+                              `+ results[0].formatted_address+
+                          `</div>
+                          <div class="card-footer">
+                                <strong>URL:</strong> <a href="
+                              `+url+`"  target="_blank" >`+url+
+                          `</a></div>
+                        
+                        </div>
+                      </div>
+                      <div class="col-sm-6">
+                        <div class="card border-info">
+                            <div class="card-header text-info">
+                                <h5 class="card-title">All Reviews (`+restdata[5]+
+                                `)</h5>
+                            </div>
+                          <div class="card-body" style="height:160px;overflow-y: scroll;">
+                            
+                            <p class="card-text">
+                            `+restdata[4]+
+                            `</p>
+                            
+                          </div>
+                        </div>
+                      </div>
+                    </div>`;
+
+                map.setCenter(results[0].geometry.location);
+                createMarker(results[0].geometry.location, markercontent);
+            }else{
+                alert("some problem in geocode" + status);
+            }
+          }); 
+      }
+
+      function createMarker(latlng,html){
+          var marker = new google.maps.Marker({
+            position: latlng,
+            map: map
+          }); 
+
+          
+          google.maps.event.addListener(marker, 'mouseover', function() {
+              infowindow.setContent(html);
+              infowindow.open(map, marker);
+          });
+
+          google.maps.event.addListener(marker, 'click', function() {
+            if(!marker.open){
+                infowindow.setContent(html);
+                infowindow.open(map,marker);
+                marker.open = true;
+            }
+            else{
+                infowindow.close();
+                marker.open = false;
+            }
+            google.maps.event.addListener(map, 'click', function() {
+                infowindow.close();
+                marker.open = false;
+            });
+        });
+      }
+
+  } //end of initMap function
+
+    </script>
+    
+    <script async defer
+    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAP_oyB-7teU_DnDs_hlSiOK1Jqyo3f8Yw&callback=initMap">
+    </script>
+  </body>
+</html>
