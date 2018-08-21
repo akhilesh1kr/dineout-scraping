@@ -8,19 +8,19 @@ Installing django 1.11 on Linux
 > Install Python 3
 
 > Set up virtualenv and install Django
-$ python3 -m venv myvenv
-$ source myvenv/bin/activate
+> >$ python3 -m venv myvenv
+> >$ source myvenv/bin/activate
 
-$ python3 -m pip install --upgrade pip
-$ pip install django==1.11
-
-
-Installing Beautiful Soup
-$ pip install beautifulsoup4
+> >$ python3 -m pip install --upgrade pip
+> >$ pip install django==1.11
 
 
-Running the app 'restaurant'
-$ python manage.py runserver
+> Installing Beautiful Soup
+> >$ pip install beautifulsoup4
+
+
+> Running the app 'restaurant'
+> >$ python manage.py runserver
 
 Run application 'restaurant' on your web browser at URL `http://127.0.0.1:8000`. This is the default port unless you change that manually.
 
