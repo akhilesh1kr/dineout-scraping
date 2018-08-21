@@ -8,11 +8,11 @@ Installing django 1.11 on Linux
 > Install Python 3
 
 > Set up virtualenv and install Django
-> >$ python3 -m venv myvenv
-> >$ source myvenv/bin/activate
+> >$ python3 -m venv myvenv<br>
+> >$ source myvenv/bin/activate<br>
 
-> >$ python3 -m pip install --upgrade pip
-> >$ pip install django==1.11
+> >$ python3 -m pip install --upgrade pip<br>
+> >$ pip install django==1.11<br>
 
 
 > Installing Beautiful Soup
